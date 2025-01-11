@@ -1,0 +1,25 @@
+
+// Escreve texto
+  tft.fillScreen(TFT_BLACK); // Limpa a tela com preto
+  tft.setTextColor(TFT_WHITE); // Define a cor do texto para branco
+  tft.setTextSize(2); // Define o tamanho do texto (1 é o menor)
+  tft.setCursor(10, 10); // Define a posição do cursor (x, y  )
+  writeOnScreen("Texto em vermelho", 10, 10, 2, TFT_WHITE);
+  tft.setTextSize(1);
+  tft.setCursor(10, 30);
+  tft.println("Mais texto, tamanho menor");
+  // Desenha uma linha
+  tft.drawLine(10, 50, 200, 50, TFT_YELLOW); // (x0, y0, x1, y1, cor)
+  // Desenha um retângulo
+  tft.drawRect(10, 70, 100, 50, TFT_GREEN); // (x, y, largura, altura, cor)
+  tft.fillRect(120,70,100,50, TFT_BLUE); //retangulo preenchido
+  // Desenha um círculo
+  tft.drawCircle(60, 140, 30, TFT_MAGENTA); // (x, y, raio, cor)
+  tft.fillCircle(180,140,30,TFT_CYAN); //circulo preenchido
+  //Desenha um triângulo
+  tft.drawTriangle(10,200,60,160,110,200,TFT_WHITE); //(x1,y1,x2,y2,x3,y3,cor)
+  tft.fillTriangle(130,200,180,160,230,200,TFT_YELLOW); //triangulo preenchido
+  //desenha um texto rotacionado
+  tft.setTextColor(TFT_WHITE, TFT_BLACK); //cor do texto e cor de fundo
+  tft.setTextDatum(MC_DATUM); // Define o ponto de referência para o texto (centro médio)
+  tft.drawString("Texto Rotacionado", 120, 260, 4);
