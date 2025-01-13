@@ -22,47 +22,27 @@ void writeOnScreen(const char* texto, int x, int y, int tamanho, uint16_t cor) {
   tft.setTextSize(tamanho);
   tft.setCursor(x, y);
   tft.println(texto);
+  Serial.println(texto);
 }
 
 void setup() { //------------------------------------------Setup
   Serial.begin(9600); //----------------------------Serial
   delay(150);
-  Serial.println("Serial inicializada!"); 
-/*
-  SPI.begin();   //----------------------------SPI
-  delay(150);
-  Serial.println("SPI begin foi"); 
-*/
-
-
   tft.init();  //------------------------------------------------Tela  
   delay(150);
-  Serial.println("tft.init");
   tft.setRotation(0);
-  Serial.println("rotation");
-  
 //---------------------------------------------------RFID
   SPI1.begin(RFID_SCK, RFID_MISO, RFID_MOSI, RFID_CS);
   rfid.PCD_Init();
-  Serial.println("PCD init");
   delay(250);
-
-
-
 }
 
 void loop() {  //------------------------------------------Loop
 tft.fillScreen(TFT_BLACK);
-writeOnScreen("aproxime o cartão", 10, 10, 2, TFT_WHITE);
-Serial.println("entro no loop");
+writeOnScreen("aproxime o cartao", 10, 10, 2, TFT_WHITE);
 
   if (waitForCardPresent()) {
-    Serial.println("entro no if");
-    Serial.println("\nTag detectada! O que você deseja fazer?");
-    Serial.println("\nDigite 'R' para ler todos os blocos ou 'W' para escrever em um bloco específico.");
     writeOnScreen("Tag detectada!\n O que você deseja fazer? Digite 'R' para ler todos os blocos ou 'W' para escrever em um bloco específico.", 10, 10, 2, TFT_WHITE);
-  
-
     while (!Serial.available());   // Aguarda até que algo seja digitado
     //char option = Serial.read();
     String option = Serial.readStringUntil('\n'); // Limpa o buffer do serial (importante!)
@@ -82,9 +62,8 @@ Serial.println("entro no loop");
 
     rfid.PICC_HaltA();
     rfid.PCD_StopCrypto1();
-    Serial.println("Aguardando uma tag RFID...");
+    writeOnScreen("Aguardando tag...", 10, 10, 2, TFT_WHITE);
   }
-    Serial.println("saiu do if");
 }
 
 // Funcoes --------------------------------------------------Funcoes
