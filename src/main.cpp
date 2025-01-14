@@ -21,6 +21,7 @@ void writeOnScreen(const char* texto, int x, int y, int tamanho, uint16_t cor) {
   tft.setTextColor(cor);
   tft.setTextSize(tamanho);
   tft.setCursor(x, y);
+  tft.fillScreen(TFT_BLACK);//Por algum motivo tem q limapr a tela 2x
   tft.println(texto);
   Serial.println(texto);
 }
@@ -34,35 +35,31 @@ void setup() { //------------------------------------------Setup
 //---------------------------------------------------RFID
   SPI1.begin(RFID_SCK, RFID_MISO, RFID_MOSI, RFID_CS);
   rfid.PCD_Init();
-  delay(250);
+  delay(150);
+  writeOnScreen("Monitoramento 4.0", 10, 10, 2, TFT_WHITE);
 }
 
 void loop() {  //------------------------------------------Loop
-tft.fillScreen(TFT_BLACK);
-writeOnScreen("aproxime o cartao", 10, 10, 2, TFT_WHITE);
-
   if (waitForCardPresent()) {
-    writeOnScreen("Tag detectada!\n O que você deseja fazer? Digite 'R' para ler todos os blocos ou 'W' para escrever em um bloco específico.", 10, 10, 2, TFT_WHITE);
-    while (!Serial.available());   // Aguarda até que algo seja digitado
-    //char option = Serial.read();
+    writeOnScreen("Tag detectada, lendo informacoes...", 10, 10, 2, TFT_WHITE);
+    readAllBlocks();
+    writeOnScreen("O que você deseja fazer? Digite 'R' para ler todos os dados novamente ou 'W' para escrever em um bloco específico.", 10, 10, 2, TFT_WHITE);
+    while (!Serial.available());   
     String option = Serial.readStringUntil('\n'); // Limpa o buffer do serial (importante!)
     option.toUpperCase();
     if( option.indexOf("R") > -1){
-
-    //if (option == 'R' || option == 'r') {
-      Serial.println("Aproxime o cartão novamente para leitura:");
+      writeOnScreen("Aproxime o cartão novamente para leitura:", 10, 10, 2, TFT_WHITE);
       if (waitForCardPresent()) {
         readAllBlocks();
       }
-    } else if( option.indexOf("W") > -1){ //if (option == 'W' || option == 'w') {
+    } else if( option.indexOf("W") > -1){
       writeToBlock();
     } else {
-      Serial.println("Opção inválida. Digite 'R' ou 'W'.");
+      writeOnScreen("Opção inválida. Digite 'R' ou 'W'.", 10, 10, 2, TFT_WHITE);
     }
 
     rfid.PICC_HaltA();
     rfid.PCD_StopCrypto1();
-    writeOnScreen("Aguardando tag...", 10, 10, 2, TFT_WHITE);
   }
 }
 
